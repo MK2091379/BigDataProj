@@ -54,7 +54,7 @@ def generate_outlier_dataset(n_samples=20000, n_features=2000, outlier_fraction=
     # Build DataFrame and save
     cols = [f"f{i}" for i in range(n_features)] + ['label']
     df = pd.DataFrame(np.column_stack([X, y]), columns=cols)
-    df.to_csv(output_path, index=False)
+    #df.to_csv(output_path, index=False)
     print(f"Saved {n_samples}×{n_features} dataset ({n_outliers} outliers) to '{output_path}'")
 
 if __name__ == "__main__":

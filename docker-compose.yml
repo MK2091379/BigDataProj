@@ -1,0 +1,30 @@
+services:
+  spark-master:
+    build: .
+    image: spark-custom
+    environment:
+      - SPARK_MODE=master
+      - SPARK_DRIVER_EXTRA_JAVA_OPTIONS=-Duser.home=/tmp
+      - SPARK_EXECUTOR_EXTRA_JAVA_OPTIONS=-Duser.home=/tmp
+      - SPARK_JARS_IVY=/tmp/.ivy2
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    volumes:
+      - .:/app         # your project folder inside container
+
+  spark-worker:
+    build: .           # same Dockerfile / same image
+    image: spark-custom
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_DRIVER_EXTRA_JAVA_OPTIONS=-Duser.home=/tmp
+      - SPARK_EXECUTOR_EXTRA_JAVA_OPTIONS=-Duser.home=/tmp
+      - SPARK_JARS_IVY=/tmp/.ivy2
+    depends_on:
+      - spark-master
+    volumes:
+      - .:/app
